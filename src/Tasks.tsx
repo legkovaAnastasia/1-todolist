@@ -14,10 +14,6 @@ type TodoPropsType = {
     isDone: boolean
 }
 
-// type VozrastPropsType = {
-//     vozrast: number
-// }
-
 export const Tasks = (props: TasksPropsType) => {
  return(
      <div>
