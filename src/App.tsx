@@ -1,54 +1,48 @@
 import React, {useState} from 'react';
 import './App.css';
-import {TodoList} from "./TodoList";
-import {Tasks} from "./Tasks";
-import {type} from "os";
+import {Todolist} from './Todolist';
 
-export type FilterType = 'active' | 'completed' | 'all'
+export type FilterValuesType = "all" | "active" | "completed";
 
 function App() {
 
-    let title = 'whant to learn1'
-    let title0 = 'whant to learn2'
-    let title2 = 2304834
-    let title3 = true
+    let [tasks, setTasks] = useState([
+        { id: 1, title: "HTML&CSS", isDone: true },
+        { id: 2, title: "JS", isDone: true },
+        { id: 3, title: "ReactJS", isDone: false },
+        { id: 4, title: "Rest API", isDone: false },
+        { id: 5, title: "GraphQL", isDone: false },
+    ]);
 
-    let [task, setTask] = useState([
-        {id: 1, title: "HTML&CSS", isDone: true},
-        {id: 2, title: "JS", isDone: true},
-        {id: 3, title: "REACTJS", isDone: false},
-        {id: 4, title: "REACTJS", isDone: false}
-    ])
-    const removeTask = (taskId: number) => {
-        task = task.filter(el => el.id !== taskId)
-        setTask(task)
+    function removeTask(id: number) {
+        let filteredTasks = tasks.filter(t => t.id != id);
+        setTasks(filteredTasks);
     }
-    //
-    // let [filter, setFilter] = useState<FilterType>('all')
-    // const taskFilter = (value: FilterType) => {
-    //     setFilter(value)
-    // }
-    //
-    // if (filter === 'active') {
-    //     task = task.filter(el => !el.isDone)
-    // }
-    // if (filter === 'completed') {
-    //     task = task.filter(el => el.isDone)
-    // }
+
+    let [filter, setFilter] = useState<FilterValuesType>("all");
+
+    let tasksForTodolist = tasks;
+
+    if (filter === "active") {
+        tasksForTodolist = tasks.filter(t => t.isDone === false);
+    }
+    if (filter === "completed") {
+        tasksForTodolist = tasks.filter(t => t.isDone === true);
+    }
+
+    function changeFilter(value: FilterValuesType) {
+        setFilter(value);
+    }
+
     return (
         <div className="App">
-            <TodoList title={title}
-                      title2={title2}
-                      task={task}
-                      // taskFilter={taskFilter}
-                      removeTask={removeTask}/>
+            <Todolist title="What to learn"
+                      tasks={tasksForTodolist}
+                      removeTask={removeTask}
+                      changeFilter={changeFilter} />
         </div>
     );
 }
 
-// Hi Guys!
-// Let's reinforce our current session!
-// -You have 2 arrays. You should create a new component TASKS, where you will render these arrays.
-// -Don't forget to assign types to our data.
-
 export default App;
+
