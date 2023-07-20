@@ -12,4 +12,3 @@ export const CheckBox1 = (props: PropsType) => {
     );
 };
 
-// export default CheckBox1;/
