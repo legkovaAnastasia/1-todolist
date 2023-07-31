@@ -4,7 +4,7 @@ import AddItemForm from "./AddItemForm";
 import {EditableSpan} from "./EditableSpan";
 
 export type TaskType = {
-    id: string
+    taskId: string
     title: string
     isDone: boolean
 }
@@ -69,17 +69,17 @@ const updateTodoListTitle = (newTitle:string)=>{
         <ul>
             {
                 props.tasks.map(t => {
-                    const onClickHandler = () => props.removeTask(t.id, props.id)
+                    const onClickHandler = () => props.removeTask(t.taskId, props.id)
                     const onChangeHandler = (e: ChangeEvent<HTMLInputElement>) => {
                         let newIsDoneValue = e.currentTarget.checked;
-                        props.changeTaskStatus(t.id, newIsDoneValue, props.id);
+                        props.changeTaskStatus(t.taskId, newIsDoneValue, props.id);
                     }
                     // const updateTaskHandler = (newTitle: string) => {
                     //     props.updateTask(props.id, t.id, newTitle)
                     // }
-                    return <li key={t.id} className={t.isDone ? "is-done" : ""}>
+                    return <li key={t.taskId} className={t.isDone ? "is-done" : ""}>
                         <input type="checkbox" onChange={onChangeHandler} checked={t.isDone}/>
-                        <EditableSpan oldTitle={t.title} callback={(newTitle)=>updateTaskHandler(t.id,newTitle)}/>
+                        <EditableSpan oldTitle={t.title} callback={(newTitle)=>updateTaskHandler(t.taskId,newTitle)}/>
                         <button onClick={onClickHandler}>x</button>
                     </li>
                 })
