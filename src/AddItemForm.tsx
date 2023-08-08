@@ -1,22 +1,25 @@
 import React, {ChangeEvent, KeyboardEvent, useState} from 'react';
+import Button from "@mui/material/Button";
+import TextField from '@mui/material/TextField';
 
-type PropsType={
-    callback:(title: string)=>void
-
+type AddItemFormPropsType = {
+    addItem: (title: string) => void
 }
-export const AddItemForm = (props:PropsType) => {
+
+export function AddItemForm(props: AddItemFormPropsType) {
+
     let [title, setTitle] = useState("")
     let [error, setError] = useState<string | null>(null)
 
-    const addTask = () => {
-        let newTitle = title.trim();
-        if (newTitle !== "") {
-            props.callback(newTitle);
+    const addItem = () => {
+        if (title.trim() !== "") {
+            props.addItem(title);
             setTitle("");
         } else {
             setError("Title is required");
         }
     }
+
     const onChangeHandler = (e: ChangeEvent<HTMLInputElement>) => {
         setTitle(e.currentTarget.value)
     }
@@ -24,20 +27,30 @@ export const AddItemForm = (props:PropsType) => {
     const onKeyPressHandler = (e: KeyboardEvent<HTMLInputElement>) => {
         setError(null);
         if (e.charCode === 13) {
-            addTask();
+            addItem();
         }
     }
-    return (
-        <div>
-            <input value={title}
+const btnStyles = {
+    maxWidth:'38px',
+    maxHeight: '38px',
+    minWidth:'38px',
+    minHeight: '38px',
+    backgroundColor: 'black'
+}
+    return <div>
+        <TextField value={title}
+                   id="outlined-basic"
+                   label={error? 'Title is required' : 'Please, type your task'}
+                   variant="outlined"
                    onChange={onChangeHandler}
-                   onKeyDown={onKeyPressHandler}
-                   className={error ? "error" : ""}
-            />
-            <button onClick={addTask}>+</button>
-            {error && <div className="error-message">{error}</div>}
-        </div>
-    );
-};
+                   onKeyPress={onKeyPressHandler}
+                   size={'small'}
+                   error={!!error}
+        />
+        <Button variant="contained" size="small" onClick={addItem}
+        style={btnStyles}>+</Button>
 
-export default AddItemForm;
+
+        {/*/!*{error && <div className="error-message">{error}*!/</div>}*/}
+    </div>
+}
