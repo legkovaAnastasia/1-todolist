@@ -17,9 +17,9 @@ export type TaskType = {
     isDone: boolean
 }
 
-type PropsType = {
-    todolist: TodolistType
-}
+    type PropsType = {
+        todolist: TodolistType
+    }
 
 export function TodolistWithRedux({todolist}: PropsType) {
     const {id, title, filter} = todolist
@@ -27,7 +27,7 @@ export function TodolistWithRedux({todolist}: PropsType) {
 
     const dispatch = useDispatch()
     const addTask = (title: string) => {
-        dispatch(addTaskAC(title,id))
+        dispatch(addTaskAC(title, id))
     }
 
     const removeTodolist = () => {
