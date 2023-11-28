@@ -7,8 +7,8 @@ import {
   FilterValuesType,
   removeTodolistTC,
   todolistsActions,
-} from "features/TodolistsList/todolists.reducer";
-import { removeTaskTC, tasksThunks, updateTaskTC } from "features/TodolistsList/tasks.reducer";
+} from "features/todolistsList/todolists.reducer";
+import { removeTaskTC, tasksThunks } from "features/todolistsList/tasks.reducer";
 import { TaskStatuses } from "api/todolists-api";
 import { Grid, Paper } from "@mui/material";
 import { AddItemForm } from "components/AddItemForm/AddItemForm";
@@ -16,8 +16,8 @@ import { Todolist } from "./Todolist/Todolist";
 import { Navigate } from "react-router-dom";
 import { useAppDispatch } from "hooks/useAppDispatch";
 import { selectIsLoggedIn } from "features/auth/auth.selectors";
-import { selectTasks } from "features/TodolistsList/tasks.selectors";
-import { selectTodolists } from "features/TodolistsList/todolists.selectors";
+import { selectTasks } from "features/todolistsList/tasks.selectors";
+import { selectTodolists } from "features/todolistsList/todolists.selectors";
 
 type PropsType = {
   demo?: boolean;
@@ -48,13 +48,13 @@ export const TodolistsList: React.FC<PropsType> = ({ demo = false }) => {
     dispatch(thunk);
   }, []);
 
-  const changeStatus = useCallback(function (id: string, status: TaskStatuses, todolistId: string) {
-    const thunk = updateTaskTC(id, { status }, todolistId);
+  const changeStatus = useCallback(function (taskId: string, status: TaskStatuses, todolistId: string) {
+    const thunk = tasksThunks.updateTask({ taskId, domainModel: { status }, todolistId });
     dispatch(thunk);
   }, []);
 
-  const changeTaskTitle = useCallback(function (id: string, newTitle: string, todolistId: string) {
-    const thunk = updateTaskTC(id, { title: newTitle }, todolistId);
+  const changeTaskTitle = useCallback(function (taskId: string, newTitle: string, todolistId: string) {
+    const thunk = tasksThunks.updateTask({ taskId, domainModel: { title: newTitle }, todolistId });
     dispatch(thunk);
   }, []);
 

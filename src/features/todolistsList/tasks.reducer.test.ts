@@ -1,6 +1,6 @@
-import { tasksActions, tasksReducer, TasksStateType, tasksThunks } from "features/TodolistsList/tasks.reducer";
+import { tasksActions, tasksReducer, TasksStateType, tasksThunks } from "features/todolistsList/tasks.reducer";
 import { TaskPriorities, TaskStatuses, TaskType } from "api/todolists-api";
-import { todolistsActions } from "features/TodolistsList/todolists.reducer";
+import { todolistsActions } from "features/todolistsList/todolists.reducer";
 
 let startState: TasksStateType = {};
 beforeEach(() => {
@@ -125,11 +125,12 @@ test("correct task should be added to correct array", () => {
 });
 
 test("status of specified task should be changed", () => {
-  const action = tasksActions.updateTask({
+  let payload = {
     taskId: "2",
-    model: { status: TaskStatuses.New },
+    domainModel: { status: TaskStatuses.New },
     todolistId: "todolistId2",
-  });
+  };
+  const action = tasksThunks.updateTask.fulfilled(payload, "requestId", payload);
 
   const endState = tasksReducer(startState, action);
 
@@ -138,7 +139,8 @@ test("status of specified task should be changed", () => {
 });
 
 test("title of specified task should be changed", () => {
-  const action = tasksActions.updateTask({ taskId: "2", model: { title: "yogurt" }, todolistId: "todolistId2" });
+  let payload = { taskId: "2", domainModel: { title: "yogurt" }, todolistId: "todolistId2" };
+  const action = tasksThunks.updateTask.fulfilled(payload, "requestId", payload);
 
   const endState = tasksReducer(startState, action);
 
