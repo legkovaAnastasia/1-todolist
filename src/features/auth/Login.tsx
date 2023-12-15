@@ -6,6 +6,7 @@ import { Button, Checkbox, FormControl, FormControlLabel, FormGroup, FormLabel, 
 import { useAppDispatch } from "common/hooks";
 import { selectIsLoggedIn } from "features/auth/auth.selectors";
 import { authThunks } from "features/auth/auth.reducer";
+import { BaseResponseType } from "common/types/common.types";
 type FormValues = {
   email: string;
   password: string;
@@ -38,9 +39,10 @@ export const Login = () => {
       dispatch(authThunks.login(values))
         .unwrap()
         .then((res) => {})
-        .catch((e) => {
-          formikHelpers.setFieldError("email", "❌ Error");
-          formikHelpers.setFieldError("password", "❌ Error");
+        .catch((e: BaseResponseType) => {
+          e.fieldsErrors.forEach((fieldError) => {
+            formikHelpers.setFieldError(fieldError.field, fieldError.error);
+          });
         });
     },
   });
@@ -67,9 +69,9 @@ export const Login = () => {
             </FormLabel>
             <FormGroup>
               <TextField label="Email" margin="normal" {...formik.getFieldProps("email")} />
-              {formik.errors.email ? <div>{formik.errors.email}</div> : null}
+              {formik.errors.email ? <div style={{ color: "red" }}>{formik.errors.email}</div> : null}
               <TextField type="password" label="Password" margin="normal" {...formik.getFieldProps("password")} />
-              {formik.errors.password ? <div>{formik.errors.password}</div> : null}
+              {formik.errors.password ? <div style={{ color: "red" }}>{formik.errors.password}</div> : null}
               <FormControlLabel
                 label={"Remember me"}
                 control={<Checkbox {...formik.getFieldProps("rememberMe")} checked={formik.values.rememberMe} />}
