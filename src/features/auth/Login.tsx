@@ -40,7 +40,7 @@ export const Login = () => {
         .unwrap()
         .then((res) => {})
         .catch((e: BaseResponseType) => {
-          e.fieldsErrors.forEach((fieldError) => {
+          e.fieldsErrors?.forEach((fieldError) => {
             formikHelpers.setFieldError(fieldError.field, fieldError.error);
           });
         });
