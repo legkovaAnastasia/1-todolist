@@ -11,55 +11,55 @@ import { selectIsLoggedIn } from "features/auth/auth.selectors";
 import { selectTasks } from "features/TodolistsList/tasks.selectors";
 import { selectTodolists } from "features/TodolistsList/todolists.selectors";
 import { TaskStatuses } from "common/enums";
+import { useActions } from "common/hooks/useActions";
 
 export const TodolistsList = () => {
   const todolists = useSelector(selectTodolists);
   const tasks = useSelector(selectTasks);
   const isLoggedIn = useSelector(selectIsLoggedIn);
 
-  const dispatch = useAppDispatch();
+  const { fetchTodolists, removeTodolist, addTodolist, changeTodolistTitle } = useActions(todolistsThunks);
+  const { removeTask, addTask, updateTask } = useActions(tasksThunks);
+  const { changeTodolistFilter } = useActions(todolistsActions);
 
   useEffect(() => {
     if (!isLoggedIn) {
       return;
     }
-    dispatch(todolistsThunks.fetchTodolists());
+    fetchTodolists();
   }, []);
 
-  const removeTask = useCallback(function (taskId: string, todolistId: string) {
-    dispatch(tasksThunks.removeTask({ taskId, todolistId }));
+  const removeTaskCb = useCallback(function (taskId: string, todolistId: string) {
+    removeTask({ taskId, todolistId });
   }, []);
 
-  const addTask = useCallback(function (title: string, todolistId: string) {
-    dispatch(tasksThunks.addTask({ title, todolistId }));
+  const addTaskCb = useCallback(function (title: string, todolistId: string) {
+    addTask({ title, todolistId });
   }, []);
 
   const changeStatus = useCallback(function (taskId: string, status: TaskStatuses, todolistId: string) {
-    dispatch(tasksThunks.updateTask({ taskId, domainModel: { status }, todolistId }));
+    updateTask({ taskId, domainModel: { status }, todolistId });
   }, []);
 
   const changeTaskTitle = useCallback(function (taskId: string, title: string, todolistId: string) {
-    dispatch(tasksThunks.updateTask({ taskId, domainModel: { title }, todolistId }));
+    updateTask({ taskId, domainModel: { title }, todolistId });
   }, []);
 
   const changeFilter = useCallback(function (filter: FilterValuesType, id: string) {
-    dispatch(todolistsActions.changeTodolistFilter({ id, filter }));
+    changeTodolistFilter({ id, filter });
   }, []);
 
-  const removeTodolist = useCallback(function (id: string) {
-    dispatch(todolistsThunks.removeTodolist(id));
+  const removeTodolistCb = useCallback(function (id: string) {
+    removeTodolist(id);
   }, []);
 
-  const changeTodolistTitle = useCallback(function (id: string, title: string) {
-    dispatch(todolistsThunks.changeTodolistTitle({ id, title }));
+  const changeTodolistTitleCb = useCallback(function (id: string, title: string) {
+    changeTodolistTitle({ id, title });
   }, []);
 
-  const addTodolist = useCallback(
-    (title: string) => {
-      dispatch(todolistsThunks.addTodolist(title));
-    },
-    [dispatch],
-  );
+  const addTodolistCb = useCallback((title: string) => {
+    addTodolist(title);
+  }, []);
 
   if (!isLoggedIn) {
     return <Navigate to={"/login"} />;
@@ -68,7 +68,7 @@ export const TodolistsList = () => {
   return (
     <>
       <Grid container style={{ padding: "20px" }}>
-        <AddItemForm addItem={addTodolist} />
+        <AddItemForm addItem={addTodolistCb} />
       </Grid>
       <Grid container spacing={3}>
         {todolists.map((tl) => {
@@ -80,13 +80,13 @@ export const TodolistsList = () => {
                 <Todolist
                   todolist={tl}
                   tasks={allTodolistTasks}
-                  removeTask={removeTask}
+                  removeTask={removeTaskCb}
                   changeFilter={changeFilter}
-                  addTask={addTask}
+                  addTask={addTaskCb}
                   changeTaskStatus={changeStatus}
-                  removeTodolist={removeTodolist}
+                  removeTodolist={removeTodolistCb}
                   changeTaskTitle={changeTaskTitle}
-                  changeTodolistTitle={changeTodolistTitle}
+                  changeTodolistTitle={changeTodolistTitleCb}
                 />
               </Paper>
             </Grid>
