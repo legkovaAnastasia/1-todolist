@@ -13,7 +13,7 @@ type PropsType = {
   todolist: TodolistDomainType;
   tasks: TaskType[];
   changeFilter: (value: FilterValuesType, todolistId: string) => void;
-  addTask: (title: string, todolistId: string) => void;
+  addTask: (title: string, todolistId: string) => Promise<any>;
   changeTaskStatus: (id: string, status: TaskStatuses, todolistId: string) => void;
   changeTaskTitle: (taskId: string, newTitle: string, todolistId: string) => void;
   removeTask: (taskId: string, todolistId: string) => void;
@@ -30,7 +30,7 @@ export const Todolist = React.memo(function (props: PropsType) {
 
   const addTask = useCallback(
     (title: string) => {
-      props.addTask(title, props.todolist.id);
+     return  props.addTask(title, props.todolist.id);
     },
     [props.addTask, props.todolist.id],
   );

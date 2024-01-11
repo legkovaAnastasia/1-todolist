@@ -39,7 +39,7 @@ export const TodolistsList = () => {
   }, []);
 
   const addTask = useCallback(function (title: string, todolistId: string) {
-    addTaskThunk({ title, todolistId });
+    return addTaskThunk({ title, todolistId }).unwrap();
   }, []);
 
   const changeStatus = useCallback(function (taskId: string, status: TaskStatuses, todolistId: string) {
@@ -63,7 +63,7 @@ export const TodolistsList = () => {
   }, []);
 
   const addTodolist = useCallback((title: string) => {
-    addTodolistThunk(title);
+    return addTodolistThunk(title).unwrap();
   }, []);
 
   if (!isLoggedIn) {
