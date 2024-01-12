@@ -15,12 +15,10 @@ import { clearTasksAndTodolists } from "common/actions";
 
 const fetchTasks = createAppAsyncThunk<{ tasks: TaskType[]; todolistId: string }, string>(
   "tasks/fetchTasks",
-  async (todolistId, thunkAPI) => {
-    return thunkTryCatch(thunkAPI, async () => {
+  async (todolistId) => {
       const res = await todolistsApi.getTasks(todolistId);
       const tasks = res.data.items;
       return { tasks, todolistId };
-    });
   },
 );
 
